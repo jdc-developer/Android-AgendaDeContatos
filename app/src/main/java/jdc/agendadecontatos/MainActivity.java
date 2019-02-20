@@ -1,4 +1,4 @@
-package agenda.jdc.agendadecontatos;
+package jdc.agendadecontatos;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

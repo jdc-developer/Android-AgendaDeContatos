@@ -1,4 +1,4 @@
-package agenda.jdc.agendadecontatos;
+package jdc.agendadecontatos;
 
 import org.junit.Test;
 
