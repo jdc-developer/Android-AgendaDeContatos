@@ -2,6 +2,7 @@ package jdc.agendadecontatos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final int REQUEST_NEW = 1;
+    private final int REQUEST_ALTER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +29,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, EditActivity.class);
                 i.putExtra("contato", new ContatoInfo());
-                startActivity(i);
+                startActivityForResult(i, REQUEST_NEW);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_NEW && resultCode == RESULT_OK) {
+
+        } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK) {
+
+        }
     }
 
     @Override
