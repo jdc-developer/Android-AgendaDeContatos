@@ -11,15 +11,17 @@ public class EditActivity extends AppCompatActivity {
 
     private ImageButton foto;
     private EditText nome;
-    private EditText endereco;
-    private EditText fone;
-    private EditText email;
     private EditText ref;
+    private EditText email;
+    private EditText fone;
+    private EditText endereco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        contato = getIntent().getParcelableExtra("contato");
 
         foto = findViewById(R.id.ftContato);
         nome = findViewById(R.id.nomeContato);
@@ -27,5 +29,11 @@ public class EditActivity extends AppCompatActivity {
         fone = findViewById(R.id.foneContato);
         email = findViewById(R.id.emailContato);
         ref = findViewById(R.id.refContato);
+
+        nome.setText(contato.getNome());
+        ref.setText(contato.getRef());
+        email.setText(contato.getEmail());
+        fone.setText(contato.getTelefone());
+        endereco.setText(contato.getEndereco());
     }
 }

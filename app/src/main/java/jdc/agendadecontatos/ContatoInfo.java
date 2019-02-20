@@ -12,10 +12,12 @@ public class ContatoInfo implements Parcelable{
     private String endereco = "";
     private String foto = "";
 
+    public ContatoInfo() {}
+
     private ContatoInfo(Parcel parcel) {
         String[] data = new String[6];
         parcel.readStringArray(data);
-        
+
         setNome(data[0]);
         setRef(data[1]);
         setEmail(data[2]);
