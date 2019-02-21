@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private final int REQUEST_NEW = 1;
     private final int REQUEST_ALTER = 2;
 
+    private String order = "ASC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dao = new ContatoDAO(this);
-        contatos = dao.getList("ASC");
+        contatos = dao.getList(order);
 
         contatosRecy = findViewById(R.id.contatosRecy);
         contatosRecy.setHasFixedSize(true);
@@ -73,13 +75,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_NEW && resultCode == RESULT_OK) {
             ContatoInfo contato = data.getParcelableExtra("contato");
             dao.insert(contato);
-            contatos = dao.getList("ASC");
+            contatos = dao.getList(order);
             adapter = new ContatoAdapter(contatos);
             contatosRecy.setAdapter(adapter);
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK) {
             ContatoInfo contato = data.getParcelableExtra("contato");
             dao.alter(contato);
-            contatos = dao.getList("ASC");
+            contatos = dao.getList(order);
             adapter = new ContatoAdapter(contatos);
             contatosRecy.setAdapter(adapter);
         }
@@ -129,10 +131,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.order_az) {
+            order = "ASC";
+        } else if (id == R.id.order_za) {
+            order = "DESC";
         }
 
-        return super.onOptionsItemSelected(item);
+        contatos = dao.getList(order);
+        adapter = new ContatoAdapter(contatos);
+        contatosRecy.setAdapter(adapter);
+
+        return true;
     }
 }
