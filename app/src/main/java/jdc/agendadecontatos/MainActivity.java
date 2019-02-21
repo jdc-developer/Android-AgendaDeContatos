@@ -1,10 +1,13 @@
 package jdc.agendadecontatos;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -82,8 +85,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void options(ContatoInfo contato) {
-        
+    private void options(final ContatoInfo contato) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(contato.getNome());
+        builder.setItems(new CharSequence[]{"Ligar", "Editar", "Excluir"},
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:" + contato.getTelefone()));
+                                startActivity(intent);
+                                break;
+                            case 1:
+                                Intent intent1 = new Intent(MainActivity.this, EditActivity.class);
+                                intent1.putExtra("contato", contato);
+                                startActivityForResult(intent1, REQUEST_ALTER);
+                                break;
+                            case 2:
+                                contatos.remove(contato);
+                                dao.delete(contato);
+                                adapter.notifyDataSetChanged();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
     @Override
