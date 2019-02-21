@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -76,6 +77,12 @@ public class EditActivity extends AppCompatActivity {
                 alertaImagem();
             }
         });
+
+        File imgFile = new File(contato.getFoto());
+        if (imgFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            foto.setImageBitmap(bitmap);
+        }
 
         salvar = findViewById(R.id.btnSalvar);
         salvar.setOnClickListener(new View.OnClickListener() {

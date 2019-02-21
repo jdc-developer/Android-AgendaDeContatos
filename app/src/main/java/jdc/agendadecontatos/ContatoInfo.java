@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class ContatoInfo implements Parcelable{
 
+    private Long id = -1L;
     private String nome = "";
     private String ref = "";
     private String email = "";
@@ -15,7 +16,7 @@ public class ContatoInfo implements Parcelable{
     public ContatoInfo() {}
 
     private ContatoInfo(Parcel parcel) {
-        String[] data = new String[6];
+        String[] data = new String[7];
         parcel.readStringArray(data);
 
         setNome(data[0]);
@@ -24,6 +25,15 @@ public class ContatoInfo implements Parcelable{
         setTelefone(data[3]);
         setEndereco(data[4]);
         setFoto(data[5]);
+        setId(Long.parseLong(data[6]));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -82,7 +92,7 @@ public class ContatoInfo implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{
-                getNome(), getRef(), getEmail(), getTelefone(), getEndereco(), getFoto()
+                getNome(), getRef(), getEmail(), getTelefone(), getEndereco(), getFoto(), String.valueOf(getId())
         });
     }
 
