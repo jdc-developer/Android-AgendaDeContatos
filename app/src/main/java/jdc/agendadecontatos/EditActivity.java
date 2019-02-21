@@ -4,8 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -34,6 +45,8 @@ public class EditActivity extends AppCompatActivity {
 
     private final int CAMERA = 1;
     private final int GALERIA = 2;
+
+    private final String IMAGE_DIR = "/fotosContatos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,5 +200,51 @@ public class EditActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_CANCELED || data == null) {
+            return;
+        }
+        if (requestCode == GALERIA) {
+            Uri contentURI = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                contato.setFoto(saveImage(bitmap));
+                foto.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CAMERA) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            contato.setFoto(saveImage(bitmap));
+            foto.setImageBitmap(bitmap);
+        }
+    }
+
+    private String saveImage(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+        File directory = new File(Environment.getExternalStorageDirectory() + IMAGE_DIR);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try {
+            File file = new File(directory, Calendar.getInstance().getTimeInMillis() + ".jpg");
+            file.createNewFile();
+            FileOutputStream output = new FileOutputStream(file);
+            output.write(bytes.toByteArray());
+
+            MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
+            output.close();
+            return file.getAbsolutePath()
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
