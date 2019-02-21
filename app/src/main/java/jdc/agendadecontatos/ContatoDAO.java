@@ -1,5 +1,6 @@
 package jdc.agendadecontatos;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -55,5 +56,39 @@ public class ContatoDAO extends SQLiteOpenHelper {
         cursor.close();
 
         return contatos;
+    }
+
+    public void insert(ContatoInfo contato) {
+        ContentValues values = new ContentValues();
+
+        values.put("nome", contato.getNome());
+        values.put("ref", contato.getRef());
+        values.put("email", contato.getEmail());
+        values.put("telefone", contato.getTelefone());
+        values.put("endereco", contato.getEndereco());
+        values.put("foto", contato.getFoto());
+
+        getWritableDatabase().insert(TABLE, null, values);
+    }
+
+    public void alter(ContatoInfo contato) {
+        ContentValues values = new ContentValues();
+
+        values.put("id", contato.getId());
+        values.put("nome", contato.getNome());
+        values.put("ref", contato.getRef());
+        values.put("email", contato.getEmail());
+        values.put("telefone", contato.getTelefone());
+        values.put("endereco", contato.getEndereco());
+        values.put("foto", contato.getFoto());
+
+        String[] args = {contato.getId().toString()};
+        getWritableDatabase().update(TABLE, values, "id=?", args);
+    }
+
+    public void delete(ContatoInfo contato) {
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = {contato.getId().toString()};
+        db.delete(TABLE, "id=?", args);
     }
 }
