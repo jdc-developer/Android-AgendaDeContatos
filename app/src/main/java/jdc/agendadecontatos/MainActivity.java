@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -16,6 +18,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ContatoDAO dao;
+
+    private RecyclerView contatosRecy;
+    private ContatoAdapter adapter;
 
     private List<ContatoInfo> contatos;
 
@@ -41,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
         dao = new ContatoDAO(this);
         contatos = dao.getList("ASC");
+
+        contatosRecy = findViewById(R.id.contatosRecy);
+        contatosRecy.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        contatosRecy.setLayoutManager(llm);
+
+        adapter = new ContatoAdapter(contatos);
+        contatosRecy.setAdapter(adapter);
     }
 
     @Override
@@ -49,10 +63,14 @@ public class MainActivity extends AppCompatActivity {
             ContatoInfo contato = data.getParcelableExtra("contato");
             dao.insert(contato);
             contatos = dao.getList("ASC");
+            adapter = new ContatoAdapter(contatos);
+            contatosRecy.setAdapter(adapter);
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK) {
             ContatoInfo contato = data.getParcelableExtra("contato");
             dao.alter(contato);
             contatos = dao.getList("ASC");
+            adapter = new ContatoAdapter(contatos);
+            contatosRecy.setAdapter(adapter);
         }
     }
 

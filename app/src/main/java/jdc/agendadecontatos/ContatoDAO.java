@@ -26,6 +26,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
                 "ref text, " +
                 "email text, " +
                 "endereco text, " +
+                "telefone text, " +
                 "foto text);", TABLE);
         db.execSQL(query);
     }
