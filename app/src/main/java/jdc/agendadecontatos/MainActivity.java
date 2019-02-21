@@ -11,7 +11,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    private ContatoDAO dao;
+
+    private List<ContatoInfo> contatos;
 
     private final int REQUEST_NEW = 1;
     private final int REQUEST_ALTER = 2;
@@ -32,14 +38,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, REQUEST_NEW);
             }
         });
+
+        dao = new ContatoDAO(this);
+        contatos = dao.getList("ASC");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_NEW && resultCode == RESULT_OK) {
-
+            ContatoInfo contato = data.getParcelableExtra("contato");
+            dao.insert(contato);
+            contatos = dao.getList("ASC");
         } else if (requestCode == REQUEST_ALTER && resultCode == RESULT_OK) {
-
+            ContatoInfo contato = data.getParcelableExtra("contato");
+            dao.alter(contato);
+            contatos = dao.getList("ASC");
         }
     }
 
