@@ -241,7 +241,7 @@ public class EditActivity extends AppCompatActivity {
 
             MediaScannerConnection.scanFile(this, new String[]{file.getPath()}, new String[]{"image/jpeg"}, null);
             output.close();
-            return file.getAbsolutePath()
+            return file.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();
         }
